@@ -37,20 +37,19 @@ public class EmployeeDao extends DaoBase {
                 employee.setSalary(rs.getBigDecimal(8));
                 employee.setCommissionPct(rs.getBigDecimal(9));
 
-                if (rs.getInt("e.manager_id") != 0) {
-                    Employee manager = new Employee();
-                    manager.setEmployeeId(rs.getInt("e.manager_id"));
-                    manager.setFirstName(rs.getString("m.first_name"));
-                    manager.setLastName(rs.getString("m.last_name"));
-                    employee.setManager(manager);
-                }
 
-                if (rs.getInt("e.department_id") != 0) {
-                    Department department = new Department();
-                    department.setDepartmentId(rs.getInt(11));
-                    department.setDepartmentName(rs.getString("d.department_name"));
-                    employee.setDepartment(department);
-                }
+                Employee manager = new Employee();
+                manager.setEmployeeId(rs.getInt("e.manager_id"));
+                manager.setFirstName(rs.getString("m.first_name"));
+                manager.setLastName(rs.getString("m.last_name"));
+                employee.setManager(manager);
+
+
+                Department department = new Department();
+                department.setDepartmentId(rs.getInt(11));
+                department.setDepartmentName(rs.getString("d.department_name"));
+                employee.setDepartment(department);
+
 
                 listaEmpleados.add(employee);
             }
@@ -118,6 +117,7 @@ public class EmployeeDao extends DaoBase {
             pstmt.executeUpdate();
         }
     }
+
     public void actualizarEmpleado(Employee employee) throws SQLException {
 
         String sql = "UPDATE employees SET first_name = ?, last_name = ?, email = ?, phone_number = ?, "
