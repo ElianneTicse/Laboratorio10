@@ -2,6 +2,7 @@
 <%@ page import="com.example.laboratorio10.Beans.Job" %>
 <%@ page import="com.example.laboratorio10.Beans.Employee" %>
 <%@ page import="com.example.laboratorio10.Beans.Department" %>
+<%@ page import="java.time.LocalDateTime" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean scope="request" id="listaTrabajos" type="java.util.ArrayList<com.example.laboratorio10.Beans.Job>"/>
 <jsp:useBean id="listaDepartamentos" type="java.util.ArrayList<com.example.laboratorio10.Beans.Department>"
@@ -43,7 +44,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="hire_date">Hire date</label>
-                            <input type="text" class="form-control form-control-sm" id="hire_date" name="hire_date">
+                            <input type="date" class="form-control form-control-sm" id="hire_date" name="hire_date">
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="job_id">Job ID</label>

@@ -26,18 +26,7 @@
                 <% } %>
             </div>
             <jsp:include page="../includes/infoMsgs.jsp"/>
-            <form method="post" action="<%=request.getContextPath()%>/JobServlet?action=buscar">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Buscar por título" name="textoBuscar"
-                           value="<%=textoBusqueda%>"/>
-                    <button class="input-group-text" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                    <a class="input-group-text" href="<%=request.getContextPath()%>/JobServlet">
-                        <i class="bi bi-x-circle"></i>
-                    </a>
-                </div>
-            </form>
+
             <table class="table">
                 <thead>
                     <tr>
@@ -88,7 +77,7 @@
                         <% if (!session.getAttribute("rolUsuario").equals("Top 3") && !session.getAttribute("rolUsuario").equals("Top 4")){ %>
                         <td>
                             <a onclick="return confirm('¿Estas seguro de borrar?');"
-                               href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
+                               href="<%=request.getContextPath()%>/EmployeeServlet?action=borrar&id=<%= e.getEmployeeId()%>"
                                type="button" class="btn btn-danger">
                                 <i class="bi bi-trash"></i>
                             </a>
