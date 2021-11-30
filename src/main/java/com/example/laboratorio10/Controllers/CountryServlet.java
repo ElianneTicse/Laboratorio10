@@ -101,8 +101,10 @@ public class CountryServlet extends HttpServlet {
                     countryId = request.getParameter("id");
                     if (countryDao.obtener(countryId) != null) {
                         countryDao.borrar(countryId);
+                        response.sendRedirect(request.getContextPath() + "/CountryServlet?msg=¡Borrado exitoso!");
+                    }else{
+                        response.sendRedirect(request.getContextPath() + "/CountryServlet?err=¡Error al borrar!");
                     }
-                    response.sendRedirect(request.getContextPath() + "/CountryServlet");
                     break;
             }
         }
