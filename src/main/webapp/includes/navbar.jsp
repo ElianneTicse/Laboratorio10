@@ -12,19 +12,22 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
-            <% if (employeeSession.getEmployeeId() > 0) { %>
+            <% if (employeeSession.getEmployeeId() > 0){ %>
+            <% if ( !session.getAttribute("rolUsuario").equals("Top 4")){ %>
             <li class="nav-item">
                 <a class="nav-link <%=currentPage.equals("cou") ? "active" : ""%>"
                    href="<%=request.getContextPath()%>/CountryServlet">
                     Country
                 </a>
             </li>
+            <% } %>
             <li class="nav-item">
                 <a class="nav-link <%=currentPage.equals("loc") ? "active" : ""%>"
                    href="<%=request.getContextPath()%>/LocationServlet">
                     Location
                 </a>
             </li>
+            <% if ( !session.getAttribute("rolUsuario").equals("Top 4")){ %>
             <li class="nav-item">
                 <a class="nav-link <%=currentPage.equals("dep") ? "active" : ""%>"
                    href="<%=request.getContextPath()%>/DepartmentServlet">
@@ -37,6 +40,7 @@
                     Employees
                 </a>
             </li>
+            <% } %>
             <li class="nav-item">
                 <a class="nav-link <%=currentPage.equals("job") ? "active" : ""%>"
                    href="<%=request.getContextPath()%>/JobServlet">
