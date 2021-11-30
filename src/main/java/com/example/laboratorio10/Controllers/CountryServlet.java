@@ -23,18 +23,37 @@ public class CountryServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
         HttpSession session = request.getSession();
         Employee em = (Employee) session.getAttribute("employeeSession");
         if (em == null) {
             response.sendRedirect(request.getContextPath());
         } else {
+
             String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
 
             CountryDao countryDao = new CountryDao();
             RequestDispatcher view;
             Country country;
             String countryId;
+
+            String rol = (String) session.getAttribute("rolUsuario");
+
+            switch (rol) {
+                case "Top 4":
+                    action = "lista";
+                    break;
+                case "Top 3":
+                    if (action.equals("formCrear") || action.equals("crear") || action.equals("borrar")) {
+                        action = "lista";
+                    }
+                    break;
+                case "Top 2":
+                    if (action.equals("editar")) {
+                        action = "lista";
+                    }
+                    break;
+            }
 
             switch (action) {
                 case "formCrear":

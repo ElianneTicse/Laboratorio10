@@ -44,6 +44,24 @@ public class DepartmentServlet extends HttpServlet {
             Department department;
             int departmentId;
 
+            String rol = (String) session.getAttribute("rolUsuario");
+
+            switch (rol) {
+                case "Top 4":
+                    action = "lista";
+                    break;
+                case "Top 3":
+                    if (action.equals("formCrear") || action.equals("crear") || action.equals("borrar")) {
+                        action = "lista";
+                    }
+                    break;
+                case "Top 2":
+                    if (action.equals("editar")) {
+                        action = "lista";
+                    }
+                    break;
+            }
+
             switch (action) {
                 case "formCrear":
                     request.setAttribute("listaLocations",locationDao.listar());

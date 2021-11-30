@@ -29,65 +29,84 @@ public class LocationServlet extends HttpServlet {
         if (em == null) {
             response.sendRedirect(request.getContextPath());
         } else {
-            String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
+            if (session.getAttribute("rolUsuario").equals("Top 4")) {
+                response.sendRedirect(request.getContextPath() + "/CountryServlet");
+            } else {
+                String action = request.getParameter("action") == null ? "lista" : request.getParameter("action");
 
-            LocationDao locationDao = new LocationDao();
-            CountryDao countryDao = new CountryDao();
-            RequestDispatcher view;
-            Location location;
-            int locationId;
+                LocationDao locationDao = new LocationDao();
+                CountryDao countryDao = new CountryDao();
+                RequestDispatcher view;
+                Location location;
+                int locationId;
 
-            switch (action) {
-                case "formCrear":
-                    request.setAttribute("listaPaises", countryDao.listar());
-                    view = request.getRequestDispatcher("location/newLocation.jsp");
-                    view.forward(request, response);
-                    break;
-                case "crear":
-                    locationId = Integer.parseInt(request.getParameter("id"));
-                    String streetAddress = request.getParameter("streetAddress");
-                    String postalCode = request.getParameter("postalCode");
-                    String city = request.getParameter("city");
-                    String stateProvince = request.getParameter("stateProvince");
-                    String countryId = request.getParameter("countryId");
+                String rol = (String) session.getAttribute("rolUsuario");
 
-                    location = locationDao.obtener(locationId);
+                switch (rol) {
+                    case "Top 3":
+                        if (action.equals("formCrear") || action.equals("crear") || action.equals("borrar")) {
+                            action = "lista";
+                        }
+                        break;
+                    case "Top 2":
+                        if (action.equals("editar")) {
+                            action = "lista";
+                        }
+                        break;
+                }
 
-                    if (location == null) {
-                        locationDao.crear(locationId, streetAddress, postalCode, city, stateProvince, countryId);
-                    } else {
-                        locationDao.actualizar(locationId, streetAddress, postalCode, city, stateProvince, countryId);
-                    }
-                    response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                    break;
-                case "lista":
-                    ArrayList<Location> lista = locationDao.listar();
-
-                    request.setAttribute("lista", lista);
-
-                    view = request.getRequestDispatcher("location/listaLocation.jsp");
-                    view.forward(request, response);
-                    break;
-
-                case "editar":
-                    locationId = Integer.parseInt(request.getParameter("id"));
-                    location = locationDao.obtener(locationId);
-                    if (location == null) {
-                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                    } else {
+                switch (action) {
+                    case "formCrear":
                         request.setAttribute("listaPaises", countryDao.listar());
-                        request.setAttribute("location", location);
-                        view = request.getRequestDispatcher("location/updateLocation.jsp");
+                        view = request.getRequestDispatcher("location/newLocation.jsp");
                         view.forward(request, response);
-                    }
-                    break;
-                case "borrar":
-                    locationId = Integer.parseInt(request.getParameter("id"));
-                    if (locationDao.obtener(locationId) != null) {
-                        locationDao.borrar(locationId);
-                    }
-                    response.sendRedirect(request.getContextPath() + "/LocationServlet");
-                    break;
+                        break;
+                    case "crear":
+                        locationId = Integer.parseInt(request.getParameter("id"));
+                        String streetAddress = request.getParameter("streetAddress");
+                        String postalCode = request.getParameter("postalCode");
+                        String city = request.getParameter("city");
+                        String stateProvince = request.getParameter("stateProvince");
+                        String countryId = request.getParameter("countryId");
+
+                        location = locationDao.obtener(locationId);
+
+                        if (location == null) {
+                            locationDao.crear(locationId, streetAddress, postalCode, city, stateProvince, countryId);
+                        } else {
+                            locationDao.actualizar(locationId, streetAddress, postalCode, city, stateProvince, countryId);
+                        }
+                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                        break;
+                    case "lista":
+                        ArrayList<Location> lista = locationDao.listar();
+
+                        request.setAttribute("lista", lista);
+
+                        view = request.getRequestDispatcher("location/listaLocation.jsp");
+                        view.forward(request, response);
+                        break;
+
+                    case "editar":
+                        locationId = Integer.parseInt(request.getParameter("id"));
+                        location = locationDao.obtener(locationId);
+                        if (location == null) {
+                            response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                        } else {
+                            request.setAttribute("listaPaises", countryDao.listar());
+                            request.setAttribute("location", location);
+                            view = request.getRequestDispatcher("location/updateLocation.jsp");
+                            view.forward(request, response);
+                        }
+                        break;
+                    case "borrar":
+                        locationId = Integer.parseInt(request.getParameter("id"));
+                        if (locationDao.obtener(locationId) != null) {
+                            locationDao.borrar(locationId);
+                        }
+                        response.sendRedirect(request.getContextPath() + "/LocationServlet");
+                        break;
+                }
             }
         }
     }
