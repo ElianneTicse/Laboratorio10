@@ -2,6 +2,7 @@ package com.example.laboratorio10.Controllers;
 
 import com.example.laboratorio10.Beans.Country;
 import com.example.laboratorio10.Beans.Employee;
+import com.example.laboratorio10.Beans.Region;
 import com.example.laboratorio10.Daos.CountryDao;
 
 
@@ -57,13 +58,14 @@ public class CountryServlet extends HttpServlet {
 
             switch (action) {
                 case "formCrear":
+                    ArrayList<Region> lista1 = countryDao.listaRegiones();
+                    request.setAttribute("lista", lista1);
                     view = request.getRequestDispatcher("country/newCountry.jsp");
                     view.forward(request, response);
                     break;
                 case "crear":
                     countryId = request.getParameter("id");
                     String countryName = request.getParameter("countryName");
-                    System.out.println(countryName);
                     BigDecimal regionId = new BigDecimal(request.getParameter("regionId"));
 
                     country = countryDao.obtener(countryId);

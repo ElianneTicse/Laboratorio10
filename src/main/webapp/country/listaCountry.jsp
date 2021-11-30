@@ -43,7 +43,7 @@
                     </td>
                     <td><%=country.getCountryName() %>
                     </td>
-                    <td><%=country.getRegionId()%>
+                    <td><%=country.getRegion().getName()%>
                     </td>
                     <td>
                         <a href="<%=request.getContextPath()%>/CountryServlet?action=editar&id=<%=country.getCountryId()%>">

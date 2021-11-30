@@ -1,4 +1,6 @@
+<%@ page import="com.example.laboratorio10.Beans.Region" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean type="java.util.ArrayList<com.example.laboratorio10.Beans.Region>" scope="request" id="lista"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,8 +26,12 @@
                             <input type="text" class="form-control" name="countryName" id="countryName" />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="regionId">Region Id</label>
-                            <input type="text" class="form-control" name="regionId" id="regionId" />
+                            <label class="form-label">Region name</label>
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="regionId">
+                                <%for(Region region: lista){%>
+                                <option value="<%=region.getIdRegion()%>"><%=region.getName()%></option>
+                                <%}%>
+                            </select>
                         </div>
                         <a href="<%= request.getContextPath()%>/CountryServlet" class="btn btn-danger">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Submit</button>

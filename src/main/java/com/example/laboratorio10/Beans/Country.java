@@ -7,6 +7,7 @@ public class Country {
     private String countryId;
     private String countryName;
     private BigDecimal regionId;
+    private Region region;
 
     /**
      * @return the countryId
@@ -50,4 +51,11 @@ public class Country {
         this.regionId = regionId;
     }
 
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
 }
