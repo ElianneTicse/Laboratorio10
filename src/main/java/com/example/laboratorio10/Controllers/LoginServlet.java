@@ -1,8 +1,12 @@
 package com.example.laboratorio10.Controllers;
 
 
+import com.example.laboratorio10.Beans.Department;
 import com.example.laboratorio10.Beans.Employee;
+import com.example.laboratorio10.Beans.Job;
+import com.example.laboratorio10.Daos.DepartmentDao;
 import com.example.laboratorio10.Daos.EmployeeDao;
+import com.example.laboratorio10.Daos.JobDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
@@ -50,17 +55,30 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("err", "El usuario o password no pueden ser vacíos");
             RequestDispatcher view = request.getRequestDispatcher("login/loginForm.jsp");
             view.forward(request, response);
-        }else{
+        } else {
             EmployeeDao employeeDao = new EmployeeDao();
             Employee employee = employeeDao.validarUsuarioPasswordHashed(username, password);
+            JobDao jobDao = new JobDao();
+            DepartmentDao departmentDao = new DepartmentDao();
 
             if (employee != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("employeeSession", employee);
 
                 session.setMaxInactiveInterval(10 * 60); // 10 minutos
+                Job job = jobDao.obtenerTrabajo(employee.getJob().getJobId());
+                Department department = departmentDao.obtener(employee.getDepartment().getDepartmentId());
 
-                response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
+                if (job.getMaxSalary()>15000 || (employee.getEmployeeId() == department.getManager().getEmployeeId()) ){
+                    response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
+                }else if (job.getMaxSalary()>8500){
+                    response.sendRedirect(request.getContextPath() + "/JobServlet");
+                }else if (job.getMaxSalary()>5000){
+                    response.sendRedirect(request.getContextPath() + "/DepartmentServlet");
+                }else {
+                    response.sendRedirect(request.getContextPath() + "/CountryServlet");
+                }
+
             } else {
                 request.setAttribute("err", "El usuario o password no existen");
                 RequestDispatcher view = request.getRequestDispatcher("login/loginForm.jsp");
