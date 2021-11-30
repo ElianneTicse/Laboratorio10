@@ -2,12 +2,14 @@
 <%@ page import="com.example.laboratorio10.Beans.Employee" %>
 <%@ page import="com.example.laboratorio10.Beans.Department" %>
 <%@ page import="com.example.laboratorio10.Beans.Job" %>
+<%@ page import="com.example.laboratorio10.Beans.JobHistory" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean id="empleado" type="com.example.laboratorio10.Beans.Employee" scope="request"/>
 <jsp:useBean scope="request" id="listaTrabajos" type="java.util.ArrayList<com.example.laboratorio10.Beans.Job>"/>
 <jsp:useBean id="listaDepartamentos" type="java.util.ArrayList<com.example.laboratorio10.Beans.Department>"
              scope="request"/>
 <jsp:useBean id="listaJefes" type="java.util.ArrayList<com.example.laboratorio10.Beans.Employee>" scope="request"/>
+<jsp:useBean id="listaJH" type="java.util.ArrayList<com.example.laboratorio10.Beans.JobHistory>" scope="request" class="java.util.ArrayList"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -96,6 +98,54 @@
                         <a href="<%= request.getContextPath()%>/EmployeeServlet" class="btn btn-danger">Cancelar</a>
                         <input type="submit" value="Guardar" class="btn btn-primary"/>
                     </form>
+                    <%if(!listaJH.isEmpty()){%>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Fecha de inicio</th>
+                                <th>Fecha de fin</th>
+                                <th>Job</th>
+                                <th>Department</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                int i = 1;
+                                for (JobHistory jh: listaJH) {
+                            %>
+                            <tr>
+                                <td><%= jh.getEmployeeId()%>
+                                </td>
+                                <td><%= jh.getStartDate()%>
+                                </td>
+                                <td><%= jh.getEndDate()%>
+                                </td>
+                                <td><%= jh.getJob().getJobTitle()%>
+                                </td>
+                                <td><%= jh.getDepartment().getDepartmentName()%>
+                                </td>
+                            </tr>
+                            <%
+                                i++; }
+
+                            %>
+                        </tbody>
+                    </table>
+                    <%
+                      } else{
+
+                    %>
+                    <br>
+                    <br>
+                    <div class="alert alert-warning" role="alert"><%=session.getAttribute("msg")%>
+                    </div>
+                    <%
+                        }
+
+                    %>
                 </div>
                 <div class="col-md-3"></div>
             </div>

@@ -64,25 +64,19 @@
                         </td>
                         <td><%= e.getDepartment().getDepartmentName()%>
                         </td>
-
-                        <% if (!session.getAttribute("rolUsuario").equals("Top 2") && !session.getAttribute("rolUsuario").equals("Top 4")){ %>
                         <td>
                             <a href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
                                type="button" class="btn btn-primary">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>
-                        <%}%>
-
-                        <% if (!session.getAttribute("rolUsuario").equals("Top 3") && !session.getAttribute("rolUsuario").equals("Top 4")){ %>
                         <td>
                             <a onclick="return confirm('¿Estas seguro de borrar?');"
-                               href="<%=request.getContextPath()%>/EmployeeServlet?action=borrar&id=<%= e.getEmployeeId()%>"
+                               href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
                                type="button" class="btn btn-danger">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>
-                        <%}%>
                     </tr>
                     <%
                             i++;

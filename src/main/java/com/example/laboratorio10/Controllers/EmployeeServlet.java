@@ -3,9 +3,11 @@ package com.example.laboratorio10.Controllers;
 import com.example.laboratorio10.Beans.Department;
 import com.example.laboratorio10.Beans.Employee;
 import com.example.laboratorio10.Beans.Job;
+import com.example.laboratorio10.Beans.JobHistory;
 import com.example.laboratorio10.Daos.DepartmentDao;
 import com.example.laboratorio10.Daos.EmployeeDao;
 import com.example.laboratorio10.Daos.JobDao;
+import com.example.laboratorio10.Daos.JobHistoryDao;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @WebServlet(name = "EmployeeServlet", urlPatterns = {"/EmployeeServlet"})
 public class EmployeeServlet extends HttpServlet {
@@ -39,6 +43,7 @@ public class EmployeeServlet extends HttpServlet {
             EmployeeDao employeeDao = new EmployeeDao();
             JobDao jobDao = new JobDao();
             DepartmentDao departmentDao = new DepartmentDao();
+            JobHistoryDao jhDao= new JobHistoryDao();
 
             String rol = (String) session.getAttribute("rolUsuario");
 
@@ -47,7 +52,7 @@ public class EmployeeServlet extends HttpServlet {
                     action = "lista";
                     break;
                 case "Top 3":
-                    if (action.equals("formCrear") || action.equals("crear") || action.equals("borrar")) {
+                    if (action.equals("agregar") || action.equals("borrar")) {
                         action = "lista";
                     }
                     break;
@@ -89,6 +94,13 @@ public class EmployeeServlet extends HttpServlet {
                             request.setAttribute("listaTrabajos", jobDao.listarTrabajos());
                             request.setAttribute("listaDepartamentos", departmentDao.listaDepartamentos());
                             request.setAttribute("listaJefes", employeeDao.listarEmpleados());
+                            JobHistory jh=jhDao.obtenerUltimoJob(employeeId);
+                            if(jh==null){
+                                String msg="No tiene registro de anteriores trabajos";
+                                session.setAttribute("msg",msg);
+                            }else{
+                                request.setAttribute("listaJH",jhDao.listarJobHistories(employeeId));
+                            }
                             view = request.getRequestDispatcher("employees/formularioEditar.jsp");
                             view.forward(request, response);
                         } else {
@@ -175,6 +187,7 @@ public class EmployeeServlet extends HttpServlet {
             e.setDepartment(department);
 
             EmployeeDao employeeDao = new EmployeeDao();
+            JobHistoryDao jhDao= new JobHistoryDao();
 
             if (request.getParameter("employee_id") == null) {
                 try {
@@ -188,7 +201,17 @@ public class EmployeeServlet extends HttpServlet {
             } else {
                 e.setEmployeeId(Integer.parseInt(request.getParameter("employee_id")));
                 try {
+                    JobHistory jh=jhDao.obtenerUltimoJob(e.getEmployeeId());
+                    Employee emp=employeeDao.obtenerEmpleado(e.getEmployeeId());
+                    DateTimeFormatter end_date=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     employeeDao.actualizarEmpleado(e);
+                    if(!e.getJob().getJobId().equals(emp.getJob().getJobId())){
+                        if(jh==null){
+                            jhDao.insertarJobHistory(new JobHistory(e.getEmployeeId(),emp.getHireDate(),end_date.format(LocalDateTime.now()),emp.getJob(),emp.getDepartment()));
+                        }else{
+                            jhDao.insertarJobHistory(new JobHistory(e.getEmployeeId(),jh.getEndDate(),end_date.format(LocalDateTime.now()),emp.getJob(),emp.getDepartment()));
+                        }
+                    }
                     session.setAttribute("msg", "Empleado actualizado exitosamente");
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
                 } catch (SQLException ex) {
