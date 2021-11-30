@@ -18,10 +18,7 @@
                 <div class="col-md-7">
                     <h1>Lista de empleados</h1>
                 </div>
-                <%
-                    Employee employeeSession = (Employee) session.getAttribute("employeeSession");
-                    if (employeeSession.getJob().getJobId().equals("AD_PRES")) {
-                %>
+                <% if (!session.getAttribute("rolUsuario").equals("Top 3") && !session.getAttribute("rolUsuario").equals("Top 4")){ %>
                 <div class="col-md-5 col-lg-4 ms-auto my-auto text-md-end">
                     <a href="<%= request.getContextPath()%>/EmployeeServlet?action=agregar" class="btn btn-primary">
                         Agregar nuevo empleado</a>
@@ -78,12 +75,17 @@
                         </td>
                         <td><%= e.getDepartment().getDepartmentName()%>
                         </td>
+
+                        <% if (!session.getAttribute("rolUsuario").equals("Top 2") && !session.getAttribute("rolUsuario").equals("Top 4")){ %>
                         <td>
                             <a href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
                                type="button" class="btn btn-primary">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>
+                        <%}%>
+
+                        <% if (!session.getAttribute("rolUsuario").equals("Top 3") && !session.getAttribute("rolUsuario").equals("Top 4")){ %>
                         <td>
                             <a onclick="return confirm('¿Estas seguro de borrar?');"
                                href="<%=request.getContextPath()%>/EmployeeServlet?action=editar&id=<%= e.getEmployeeId()%>"
@@ -91,6 +93,7 @@
                                 <i class="bi bi-trash"></i>
                             </a>
                         </td>
+                        <%}%>
                     </tr>
                     <%
                             i++;

@@ -18,10 +18,14 @@
                 <div class="col-md-7">
                     <h1 class=''>Lista de trabajos en hr</h1>
                 </div>
+
+                <% if (!session.getAttribute("rolUsuario").equals("Top 3")){ %>
                 <div class="col-md-5 col-lg-4 ms-auto my-auto text-md-end">
                     <a href="<%= request.getContextPath()%>/JobServlet?action=formCrear" class="btn btn-primary">Crear
                         Trabajo</a>
                 </div>
+                <%}%>
+
             </div>
             <% if (request.getParameter("msg") != null) {%>
             <div class="alert alert-success" role="alert"><%=request.getParameter("msg")%>
@@ -56,16 +60,21 @@
                     </td>
                     <td><%=job.getMaxSalary()%>
                     </td>
+
+                    <% if (!session.getAttribute("rolUsuario").equals("Top 2")){ %>
                     <td>
                         <a href="<%=request.getContextPath()%>/JobServlet?action=editar&id=<%=job.getJobId()%>">
                             Editar
                         </a>
                     </td>
+                    <%}%>
+                    <% if (!session.getAttribute("rolUsuario").equals("Top 3")){ %>
                     <td>
                         <a href="<%=request.getContextPath()%>/JobServlet?action=borrar&id=<%=job.getJobId()%>">
                             Borrar
                         </a>
                     </td>
+                    <%}%>
                 </tr>
                 <%
                         i++;

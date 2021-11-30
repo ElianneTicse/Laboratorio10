@@ -1,7 +1,12 @@
 <%@page import="com.example.laboratorio10.Beans.Location" %>
 <%@page import="java.util.ArrayList" %>
+<%@ page import="com.example.laboratorio10.Beans.Employee" %>
+<%@ page import="com.mysql.cj.Session" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean type="java.util.ArrayList<com.example.laboratorio10.Beans.Location>" scope="request" id="lista"/>
+<jsp:useBean id="employeeSession" type="com.example.laboratorio10.Beans.Employee" scope="session"
+             class="com.example.laboratorio10.Beans.Employee"/>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,10 +22,12 @@
                 <div class="col-md-7">
                     <h1 class=''>Lista de Ubicaciones</h1>
                 </div>
+                <% if (!session.getAttribute("rolUsuario").equals("Top 3")){ %>
                 <div class="col-md-5 col-lg-4 ms-auto my-auto text-md-end">
                     <a href="<%= request.getContextPath()%>/LocationServlet?action=formCrear" class="btn btn-primary">
                         Crear Ubicación</a>
                 </div>
+                <%}%>
             </div>
             <jsp:include page="../includes/infoMsgs.jsp"/>
             <table class="table">
@@ -54,16 +61,24 @@
                     </td>
                     <td><%=location.getCountry().getCountryName() %>
                     </td>
+
+                    <% if (!session.getAttribute("rolUsuario").equals("Top 2")){ %>
                     <td>
                         <a href="<%=request.getContextPath()%>/LocationServlet?action=editar&id=<%=location.getLocationId()%>">
                             Editar
                         </a>
                     </td>
+                    <%}%>
+
+                    <% if (!session.getAttribute("rolUsuario").equals("Top 3")){ %>
                     <td>
                         <a href="<%=request.getContextPath()%>/LocationServlet?action=borrar&id=<%=location.getLocationId()%>">
                             Borrar
                         </a>
                     </td>
+                    <%}%>
+
+
                 </tr>
                 <%
                         i++;
