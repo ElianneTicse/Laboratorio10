@@ -49,7 +49,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="hire_date">Hire date</label>
-                            <input type="text" class="form-control form-control-sm" id="hire_date" name="hire_date"
+                            <input type="date" class="form-control form-control-sm" id="hire_date" name="hire_date"
                                    value="<%= empleado.getHireDate() == null ? "" : empleado.getHireDate()%>">
                         </div>
                         <div class="mb-3">
