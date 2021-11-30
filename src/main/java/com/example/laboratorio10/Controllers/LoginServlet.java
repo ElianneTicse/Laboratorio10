@@ -70,12 +70,16 @@ public class LoginServlet extends HttpServlet {
                 Department department = departmentDao.obtener(employee.getDepartment().getDepartmentId());
 
                 if (job.getMaxSalary()>15000 || (employee.getEmployeeId() == department.getManager().getEmployeeId()) ){
+                    session.setAttribute("rolUsuario","Top 1");
                     response.sendRedirect(request.getContextPath() + "/EmployeeServlet");
                 }else if (job.getMaxSalary()>8500){
+                    session.setAttribute("rolUsuario","Top 2");
                     response.sendRedirect(request.getContextPath() + "/JobServlet");
                 }else if (job.getMaxSalary()>5000){
+                    session.setAttribute("rolUsuario","Top 3");
                     response.sendRedirect(request.getContextPath() + "/DepartmentServlet");
                 }else {
+                    session.setAttribute("rolUsuario","Top 4");
                     response.sendRedirect(request.getContextPath() + "/CountryServlet");
                 }
 
